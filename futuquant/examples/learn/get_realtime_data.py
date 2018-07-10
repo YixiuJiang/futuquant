@@ -4,13 +4,13 @@ Examples for use the python functions: real-time data
 """
 import futuquant as ft
 
+stock_code_list = ["SH.600038"]
+
 
 def _example_stock_quote(quote_ctx):
     """
     获取批量报价，输出 股票名称，时间，当前价，开盘价，最高价，最低价，昨天收盘价，成交量，成交额，换手率，振幅，股票状态
     """
-    stock_code_list = ["US.AAPL", "HK.00700"]
-
     # subscribe "QUOTE"
     ret_status, ret_data = quote_ctx.subscribe(stock_code_list, ft.SubType.QUOTE)
     if ret_status != ft.RET_OK:
@@ -38,7 +38,6 @@ def _example_cur_kline(quote_ctx):
     获取当前K线，输出 股票代码，时间，开盘价，收盘价，最高价，最低价，成交量，成交额
     """
     # subscribe Kline
-    stock_code_list = ["US.AAPL", "HK.00700"]
     sub_type_list = [ft.SubType.K_1M, ft.SubType.K_5M, ft.SubType.K_15M, ft.SubType.K_30M, ft.SubType.K_60M,
                      ft.SubType.K_DAY, ft.SubType.K_WEEK, ft.SubType.K_MON]
 
@@ -69,7 +68,6 @@ def _example_rt_ticker(quote_ctx):
     """
     获取逐笔，输出 股票代码，时间，价格，成交量，成交金额，暂时没什么意义的序列号
     """
-    stock_code_list = ["HK.00700", "US.AAPL"]
 
     # subscribe "TICKER"
     ret_status, ret_data = quote_ctx.subscribe(stock_code_list, ft.SubType.TICKER)
@@ -91,7 +89,6 @@ def _example_order_book(quote_ctx):
     """
     获取摆盘数据，输出 买价，买量，买盘经纪个数，卖价，卖量，卖盘经纪个数
     """
-    stock_code_list = ["US.AAPL", "HK.00700"]
 
     # subscribe "ORDER_BOOK"
     ret_status, ret_data = quote_ctx.subscribe(stock_code_list, ft.SubType.ORDER_BOOK)
@@ -141,7 +138,7 @@ def _example_get_market_snapshot(quote_ctx):
     格式化窝轮最后到期时间，窝轮对应的正股，窝轮回收价，窝轮街货量，窝轮发行量，窝轮街货占比，窝轮对冲值，窝轮引伸波幅，
     窝轮溢价
     """
-    ret_status, ret_data = quote_ctx.get_market_snapshot(["US.AAPL", "HK.00700"])
+    ret_status, ret_data = quote_ctx.get_market_snapshot(stock_code_list)
     if ret_status != ft.RET_OK:
         print(ret_data)
         exit()
@@ -153,7 +150,6 @@ def _example_rt_data(quote_ctx):
     """
     获取分时数据，输出 时间，数据状态，开盘多少分钟，目前价，昨收价，平均价，成交量，成交额
     """
-    stock_code_list = ["US.AAPL", "HK.00700"]
 
     ret_status, ret_data = quote_ctx.subscribe(stock_code_list, ft.SubType.RT_DATA)
     if ret_status != ft.RET_OK:
@@ -199,7 +195,6 @@ def _example_broker_queue(quote_ctx):
     """
     获取经纪队列，输出 买盘卖盘的经纪ID，经纪名称，经纪档位
     """
-    stock_code_list = ["HK.00700"]
 
     for stk_code in stock_code_list:
         ret_status, ret_data = quote_ctx.subscribe(stk_code, ft.SubType.BROKER)
@@ -233,17 +228,17 @@ if __name__ == "__main__":
 
     # 获取实时数据
     _example_stock_quote(quote_context)
-    _example_get_market_snapshot(quote_context)
-    _example_cur_kline(quote_context)
+    #_example_get_market_snapshot(quote_context)
+    #_example_cur_kline(quote_context)
     _example_rt_ticker(quote_context)
     _example_order_book(quote_context)
-    _example_get_trade_days(quote_context)
-    _example_stock_basic(quote_context)
-    _example_rt_data(quote_context)
-    _example_plate_subplate(quote_context)
-    _example_plate_stock(quote_context)
-    _example_broker_queue(quote_context)
-    _example_global_state(quote_context)
+    #_example_get_trade_days(quote_context)
+    #_example_stock_basic(quote_context)
+    #_example_rt_data(quote_context)
+    #_example_plate_subplate(quote_context)
+    #_example_plate_stock(quote_context)
+    #_example_broker_queue(quote_context)
+    #_example_global_state(quote_context)
 
     quote_context.close()
     print("\n* all test finish! *")
