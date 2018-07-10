@@ -4,13 +4,24 @@ Examples for use the python functions: real-time data
 """
 import futuquant as ft
 
-stock_code_list = ["SH.600038"]
+"""
+上诚指数 茅台
+"""
+stock_code_list = ["SH.600519"]
 
+import pymongo
+
+mongodbclient = pymongo.MongoClient("mongodb://localhost:27017/")
+stockdb = mongodbclient["stock"]
 
 def _example_stock_quote(quote_ctx):
     """
     获取批量报价，输出 股票名称，时间，当前价，开盘价，最高价，最低价，昨天收盘价，成交量，成交额，换手率，振幅，股票状态
     """
+    collist = stockdb.collection_names()
+    if not "stock_quote" in collist:
+        stock_quote = stockdb["stock_quote"]
+
     # subscribe "QUOTE"
     ret_status, ret_data = quote_ctx.subscribe(stock_code_list, ft.SubType.QUOTE)
     if ret_status != ft.RET_OK:
@@ -31,6 +42,7 @@ def _example_stock_quote(quote_ctx):
 
     print("QUOTE_TABLE")
     print(quote_table)
+    stock_quote.insert_one(quote_table)
 
 
 def _example_cur_kline(quote_ctx):
@@ -68,7 +80,9 @@ def _example_rt_ticker(quote_ctx):
     """
     获取逐笔，输出 股票代码，时间，价格，成交量，成交金额，暂时没什么意义的序列号
     """
-
+    collist = stockdb.collection_names()
+    if not "rt_ticket" in collist:
+        rt_ticket = stockdb["rt_ticket"]
     # subscribe "TICKER"
     ret_status, ret_data = quote_ctx.subscribe(stock_code_list, ft.SubType.TICKER)
     if ret_status != ft.RET_OK:
@@ -76,7 +90,7 @@ def _example_rt_ticker(quote_ctx):
         exit()
 
     for stk_code in stock_code_list:
-        ret_status, ret_data = quote_ctx.get_rt_ticker(stk_code, 3)
+        ret_status, ret_data = quote_ctx.get_rt_ticker(stk_code, 99)
         if ret_status != ft.RET_OK:
             print(stk_code, ret_data)
             exit()
