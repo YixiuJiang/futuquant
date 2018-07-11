@@ -3,7 +3,7 @@
 Examples for use the python functions: real-time data
 """
 import futuquant as ft
-
+import json as json
 """
 上诚指数 茅台
 """
@@ -42,7 +42,9 @@ def _example_stock_quote(quote_ctx):
 
     print("QUOTE_TABLE")
     print(quote_table)
-    stock_quote.insert_one(quote_table)
+    jsonstr= quote_table.to_json(orient='split')
+    obj = json.loads(jsonstr)
+    stock_quote.insert_one(obj)
 
 
 def _example_cur_kline(quote_ctx):
@@ -96,6 +98,9 @@ def _example_rt_ticker(quote_ctx):
             exit()
         print("%s TICKER" % stk_code)
         print(ret_data)
+        jsonstr = ret_data.to_json(orient='split')
+        obj = json.loads(jsonstr)
+        rt_ticket.insert_one(obj)
         print("\n\n")
 
 
